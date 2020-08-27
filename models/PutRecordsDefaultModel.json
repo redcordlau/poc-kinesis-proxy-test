@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "PutRecords proxy payload data",
+  "type": "object",
+  "properties": {
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string"
+          },
+          "partition-key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "data",
+          "partition-key"
+        ]
+      }
+    }
+  },
+  "required": [
+    "records"
+  ]
+}

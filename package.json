@@ -1,0 +1,13 @@
+{
+  "name": "poc-kinesis-proxy-test",
+  "description": "",
+  "version": "0.1.0",
+  "dependencies": {},
+  "scripts": {
+    "deploy:dev": "sls deploy --verbose --stage dev"
+  },
+  "devDependencies": {
+    "@redcordlau/serverless-apigateway-service-proxy": "^1.11.0-beta.1",
+    "serverless-aws-documentation": "^1.1.0"
+  }
+}

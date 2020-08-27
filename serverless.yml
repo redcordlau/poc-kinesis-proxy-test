@@ -1,0 +1,45 @@
+service: poc-kinesis-proxy-test
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: ${opt:region, 'ap-east-1'}
+
+plugins:
+  - '@redcordlau/serverless-apigateway-service-proxy'
+  - serverless-aws-documentation
+
+custom:
+  apiGatewayServiceProxies:
+    - kinesis: # partitionkey is set apigateway requestid by default
+        path: /kinesis
+        method: post
+        action: PutRecords
+        streamName: { Ref: 'POCSTREAM' }
+        cors: true
+        requestModels: 
+          "application/json": "PutRecordsDefaultModel"
+        requestValidatorId: { Ref: 'POCRequestValidator' }
+  documentation:
+    models:
+      -
+        name: "PutRecordsDefaultModel"
+        description: "Default model for kinesis PutRecords"
+        contentType: "application/json"
+        schema: ${file(models/PutRecordsDefaultModel.json)}
+
+resources:
+  Resources:
+    POCSTREAM:
+      Type: AWS::Kinesis::Stream
+      Properties:
+        Name: poc-proxy-stream
+        ShardCount: 1
+    POCRequestValidator:
+      Type: "AWS::ApiGateway::RequestValidator"
+      Properties:
+        Name: 'poc-req-validator'
+        RestApiId: 
+          Ref: ApiGatewayRestApi
+        ValidateRequestBody: true
+        ValidateRequestParameters: false
